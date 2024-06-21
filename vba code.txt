@@ -1,0 +1,63 @@
+Sub VBA_Mod2()
+
+Dim Brand As String
+Dim Brand_total As Double
+Brand_total = 0
+Dim summary_table_row As Integer
+Dim openprice As Double
+Dim closeprice As Double
+Dim quarter As Double
+Dim percent As Double
+Dim lastrow As Long
+Dim worksheetname As String
+
+
+Range("n2").Value = "Greatest % Increase"
+Range("n3").Value = "Greatest % Decrease"
+Range("n4").Value = "Greatest Total Volume"
+Range("J1").Value = "Ticker"
+Range("n1").Value = "Value"
+
+For Each ws In Worksheets
+
+summary_table_row = 2
+
+ws.Range("I1").Value = "Ticker"
+ws.Range("j1").Value = "Quarterly Change"
+ws.Range("k1").Value = "Percent Change"
+ws.Range("l1").Value = "Total Stock Volume"
+
+lastrow = ws.Cells(Rows.Count, "A").End(xlUp).Row
+worksheetname = ws.Name
+openprice = Cells(2, 3)
+For i = 2 To lastrow
+
+If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+
+Brand = ws.Cells(i, 1).Value
+
+closeprice = ws.Cells(i, 6).Value
+
+quarter = closeprice - openprice
+
+percent = (closeprice - openprice) / openprice
+
+Brand_total = ws.Cells(i, 7).Value + Brand_total
+ws.Range("i" & summary_table_row).Value = Brand
+ws.Range("j" & summary_table_row).Value = quarter
+ws.Range("k" & summary_table_row).Value = percent
+ws.Range("l" & summary_table_row).Value = Brand_total
+summary_table_row = summary_table_row + 1
+
+openprice = ws.Cells(i + l, 3)
+Brand_total = 0
+Else
+Brand_total = ws.Cells(i, 7).Value + Brand_total
+End If
+
+Next i
+Next
+
+Range("O4") = WorksheetFunction.Max(Range("L2:L1501")) + 1
+
+End Sub
